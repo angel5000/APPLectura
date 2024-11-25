@@ -71,14 +71,14 @@
                                 android:layout_height="match_parent">
 
                                 <ImageView
-                                    android:id="@+id/imageView"
+                                    android:id="@+id/imagePortada"
                                     android:layout_width="380dp"
                                     android:layout_height="wrap_content"
                                     app:srcCompat="@mipmap/img"
                                     tools:srcCompat="@mipmap/img" />
 
                                 <TextView
-                                    android:id="@+id/textView2"
+                                    android:id="@+id/txtnomblect"
                                     android:layout_width="wrap_content"
                                     android:layout_height="48dp"
                                     android:layout_marginLeft="20dp"
