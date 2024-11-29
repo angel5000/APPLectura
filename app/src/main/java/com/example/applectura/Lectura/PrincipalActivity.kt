@@ -25,6 +25,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applectura.R
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -96,6 +97,18 @@ class PrincipalActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            val tag = view.tag as Pair<RecyclerView.ViewHolder, Int> // Obtener el Pair (ViewHolder, ID)
+            val historiaId = tag.second // Aquí tienes el ID de la historia
+
+            // Enviar el ID a la otra actividad
+            val intent = Intent(this, LecturaActivity::class.java)
+            intent.putExtra("ITEM_ID", historiaId)
+            startActivity(intent)
+        }
+
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -191,9 +204,10 @@ class HistoriaAdapter(private val context: Context, private val historias: List<
             holder = ViewHolder()
             holder.icon = view.findViewById(R.id.icon)
             holder.text = view.findViewById(R.id.text)
-            view.tag = holder
+            view.tag = Pair(holder, historias[position].idHistoria)
         } else {
-            holder = view.tag as ViewHolder
+            val tag = view.tag as Pair<ViewHolder, Int>
+            holder = tag.first
         }
 
         val historia = historias[position]

@@ -12,30 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.APPLectura"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Lectura.RedaccionActivity"
+            android:exported="false" />
         <activity
             android:name=".Lectura.LecturaActivity"
             android:exported="false"
-
-            />
+            android:theme="@style/Theme.AppLectura.NoActionBar" />
         <activity
             android:name=".Lectura.PerfilActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppLectura.NoActionBar" />
         <activity
             android:name=".Lectura.PrincipalActivity"
             android:exported="true"
             android:theme="@style/Theme.AppLectura.NoActionBar">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
-            </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Lectura.LoginActivity"
             android:exported="false" />
-
     </application>
 
 </manifest>

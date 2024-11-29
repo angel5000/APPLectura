@@ -12,7 +12,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -20,7 +20,7 @@
         tools:ignore="MissingConstraints" />
 
     <LinearLayout
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
@@ -28,8 +28,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,7 +47,8 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fillViewport="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,35 +63,53 @@
                         app:cardCornerRadius="10dp">
 
                         <LinearLayout
-                            android:layout_width="380dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="15dp"
                             android:gravity="center"
                             android:orientation="vertical">
 
                             <FrameLayout
-                                android:layout_width="380dp"
-                                android:layout_height="match_parent">
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_centerInParent="true">
+
+                                <ImageView
+                                    android:id="@+id/texture2"
+                                    android:layout_width="420dp"
+                                    android:layout_height="210dp"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/cubierta"
+
+                                    />
 
                                 <ImageView
                                     android:id="@+id/imagePortada"
-                                    android:layout_width="380dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:scaleType="center"
                                     app:srcCompat="@mipmap/img"
                                     tools:srcCompat="@mipmap/img" />
 
-                                <TextView
-                                    android:id="@+id/txtnomblect"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="48dp"
-                                    android:layout_marginLeft="20dp"
                                     android:layout_marginTop="155dp"
-                                    android:gravity="center"
-                                    android:text="Nombre Lectura"
-                                    android:textColor="@color/white"
-                                    android:textColorHint="@color/black"
-                                    android:textColorLink="@color/black"
-                                    android:textSize="20sp" />
+                                    android:background="#9F6C6C6C"
+                                    android:gravity="left">
+
+                                    <TextView
+                                        android:id="@+id/txtnomblect"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="48dp"
+
+                                        android:layout_marginLeft="15dp"
+                                        android:gravity="center"
+                                        android:text="Nombre Lectura"
+                                        android:textColor="@color/white"
+                                        android:textColorHint="@color/black"
+                                        android:textColorLink="@color/black"
+                                        android:textSize="20sp" />
+                                </LinearLayout>
                             </FrameLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -112,20 +133,25 @@
                             android:textSize="24sp" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="340dp"
                             android:layout_height="100dp"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="65dp"
                             android:background="#9C27B0"
                             android:backgroundTint="#00501414"
                             android:isScrollContainer="true"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:scrollbars="vertical">
 
                             <TextView
                                 android:id="@+id/textdescrip"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:isScrollContainer="true"
+                                android:maxHeight="150dp"
+                                android:scrollbars="vertical"
                                 android:text="Sinopsis de la historia"
+
                                 android:textColor="@color/white" />
 
                         </LinearLayout>
@@ -135,7 +161,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="380dp"
-                        android:layout_height="65dp"
+                        android:layout_height="100dp"
                         android:layout_gravity="bottom|center|center_vertical"
                         android:layout_marginTop="25dp"
                         android:background="#673AB7"
@@ -146,7 +172,30 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:layout_marginTop="13dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView"
+                                android:textColor="#FFFFFF"
+                                android:textColorHint="#FFFFFF"
+                                tools:text="Generos:" />
+
+                            <TextView
+                                android:id="@+id/txtgenero"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Generos a mostrar"
+                                android:textColor="@color/white"
+                                android:textColorHint="@color/white" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="50dp"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -155,7 +204,9 @@
                                 android:id="@+id/button"
                                 android:layout_width="100dp"
                                 android:layout_height="50dp"
-                                android:text="Leer" />
+                                android:text="Leer"
+                                android:textColor="#FFFFFF" />
+
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>

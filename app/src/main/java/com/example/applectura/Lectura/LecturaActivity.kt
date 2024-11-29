@@ -1,38 +1,50 @@
 package com.example.applectura.Lectura
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.database.sqlite.SQLiteOpenHelper
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.GridView
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.example.applectura.R
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Picasso.LoadedFrom
+import com.squareup.picasso.Target
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
-import com.example.applectura.R
+import jp.wasabeef.blurry.Blurry
 
 class LecturaActivity : AppCompatActivity() {
+    var iddatos=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lectura2)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        val textView = findViewById<TextView>(R.id.textdescrip)
+        textView.movementMethod = ScrollingMovementMethod()
+        val itemId = intent.getIntExtra("ITEM_ID", -1) // Recuperar el ID que fue enviado
 
+        // Usar el ID para realizar alguna acción (por ejemplo, cargar más detalles de la historia)
+        if (itemId != -1) {
+            iddatos = itemId
+        }
         // Habilitar el botón de retroceso si es necesario
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -40,29 +52,31 @@ class LecturaActivity : AppCompatActivity() {
         val txtNombreLectura = findViewById<TextView>(R.id.txtnomblect)
         val txtDescripcionLectura = findViewById<TextView>(R.id.textdescrip)
 // Obtener datos de la base de datos
-        val lectura = dbHelper.obtenerTituloPorId(1)
+        val lectura = dbHelper.obtenerTituloPorId(iddatos)
         txtNombreLectura.text = lectura
 
         val imageView: ImageView = findViewById(R.id.imagePortada)
-
+        val imagefondo: ImageView = findViewById(R.id.texture2)
 // Obtener la imagen desde la base de datos
-        val portadaBitmap = dbHelper.obtenerPortada(1) // Suponiendo que '1' es el id de la historia
+        val portadaBitmap =
+            dbHelper.obtenerPortada(iddatos) // Suponiendo que '1' es el id de la historia
 
 // Verificar si la imagen existe y cargarla
         if (portadaBitmap != null) {
             imageView.setImageBitmap(portadaBitmap)
+            imagefondo.setImageBitmap(portadaBitmap)
         }
 
-        val sinopsis = dbHelper.obtenerSinopsis(1)
-        txtDescripcionLectura.text=sinopsis
+        val sinopsis = dbHelper.obtenerSinopsis(iddatos)
+        txtDescripcionLectura.text = sinopsis
         ////////////
 
-        val comentarios = dbHelper.obtenerComentariosPorCapitulo(1)
+        val comentarios = dbHelper.obtenerComentariosPorCapitulo(iddatos)
 
         val gridView: GridView = findViewById(R.id.gridcomentario)
 
         // Configurar el adaptador para mostrar los datos
-       /* val adapter = ArrayAdapter(
+        /* val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_list_item_1, // Layout predefinido para un solo elemento
             comentarios // Lista de comentarios
@@ -71,9 +85,23 @@ class LecturaActivity : AppCompatActivity() {
         val adapter = MyAdapter(this, comentarios)
         gridView.adapter = adapter
         val gridView2: GridView = findViewById(R.id.gridviewcap)
-        val capitulos= dbHelper.obtenercapitulos(2)  // Este método debería devolver la lista de capítulos
+        val capitulos =
+            dbHelper.obtenercapitulos(iddatos)  // Este método debería devolver la lista de capítulos
         val adapter2 = GridCap(this, capitulos)
         gridView2.adapter = adapter2
+        val imageView2: ImageView = findViewById(R.id.texture2)
+
+
+
+        imageView2.post {
+            Blurry.with(this)
+                .radius(10) // Intensidad del desenfoque
+                .capture(imageView2) // Captura el contenido visible del ImageView
+                .into(imageView2) // Reemplaza el contenido desenfocado en el ImageView
+        }
+
+
+
     }
 
 
@@ -82,8 +110,7 @@ class LecturaActivity : AppCompatActivity() {
 
 
     override fun onSupportNavigateUp(): Boolean {
-        val intent = Intent(this, PrincipalActivity::class.java)
-        startActivity(intent)
+
         finish() // Finaliza la actividad actual para que no quede en la pila
         return true
     }
@@ -210,7 +237,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.readableDatabase
         val comentarios = mutableListOf<String>()
         // Realizamos una sola consulta para obtener ambos campos: numeroCapitulo y titulo
-        val query = "SELECT numeroCapitulo, titulo FROM Capitulo WHERE idCapitulo = ?"
+        val query = "SELECT numeroCapitulo, titulo FROM Capitulo WHERE idHistoria = ?"
 
         val cursor = db.rawQuery(query, arrayOf(idCAP.toString()))
         cursor.use {
