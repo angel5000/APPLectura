@@ -7,11 +7,11 @@
         <item
             android:id="@+id/nav_home"
 
-            android:title="Perfil" />
+            android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_Perfil"
 
-            android:title="xxxx" />
+            android:title="Perfil"  />
         <item
             android:id="@+id/nav_slideshow"
 

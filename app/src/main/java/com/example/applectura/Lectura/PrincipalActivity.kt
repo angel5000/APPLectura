@@ -2,6 +2,7 @@ package com.example.applectura.Lectura
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.BitmapFactory
@@ -72,8 +73,29 @@ class PrincipalActivity : AppCompatActivity() {
         // Inicializa el NavigationView
         val navView: NavigationView = findViewById(R.id.nav_view)
 
-        // Puedes configurar los elementos del menú en el NavigationView aquí si es necesario
-        // navView.setNavigationItemSelectedListener { /* acción al seleccionar un ítem */ }
+        navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    // Verificar si ya estamos en la actividad PrincipalActivity
+                    if (javaClass != PrincipalActivity::class.java) {
+                        // Si no estamos en PrincipalActivity, abrirla
+                        startActivity(Intent(this, PrincipalActivity::class.java))
+                    }
+                }
+                R.id.nav_Perfil -> {
+
+                    startActivity(Intent(this, PerfilActivity::class.java))
+                }
+                R.id.nav_slideshow -> {
+                    // Ir a la actividad "Slideshow"
+                   // startActivity(Intent(this, SlideshowActivity::class.java))
+                }
+            }
+
+            // Cerrar el menú lateral después de la selección
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
