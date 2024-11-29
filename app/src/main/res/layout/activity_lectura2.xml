@@ -75,8 +75,8 @@
 
                                 <ImageView
                                     android:id="@+id/texture2"
-                                    android:layout_width="420dp"
-                                    android:layout_height="210dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
                                     app:srcCompat="@drawable/cubierta"
 
