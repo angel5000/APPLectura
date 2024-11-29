@@ -1,5 +1,6 @@
 package com.example.applectura.Lectura
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +11,14 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
+import android.widget.GridView
 import android.widget.ImageView
 import java.io.File
 import java.io.FileOutputStream
@@ -30,7 +38,7 @@ class LecturaActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         val dbHelper = DatabaseHelper(this)
         val txtNombreLectura = findViewById<TextView>(R.id.txtnomblect)
-
+        val txtDescripcionLectura = findViewById<TextView>(R.id.textdescrip)
 // Obtener datos de la base de datos
         val lectura = dbHelper.obtenerTituloPorId(1)
         txtNombreLectura.text = lectura
@@ -45,10 +53,31 @@ class LecturaActivity : AppCompatActivity() {
             imageView.setImageBitmap(portadaBitmap)
         }
 
+        val sinopsis = dbHelper.obtenerSinopsis(1)
+        txtDescripcionLectura.text=sinopsis
+        ////////////
 
+        val comentarios = dbHelper.obtenerComentariosPorCapitulo(1)
 
+        val gridView: GridView = findViewById(R.id.gridcomentario)
+
+        // Configurar el adaptador para mostrar los datos
+       /* val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1, // Layout predefinido para un solo elemento
+            comentarios // Lista de comentarios
+        )
+        gridView.adapter = adapter*/
+        val adapter = MyAdapter(this, comentarios)
+        gridView.adapter = adapter
+        val gridView2: GridView = findViewById(R.id.gridviewcap)
+        val capitulos= dbHelper.obtenercapitulos(2)  // Este método debería devolver la lista de capítulos
+        val adapter2 = GridCap(this, capitulos)
+        gridView2.adapter = adapter2
     }
 
+
+/////////
 
 
 
@@ -103,37 +132,237 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             "No encontrado"
         }
     }
+    fun obtenerSinopsis(idHistoria: Int): String? {
+        val db = this.readableDatabase
+        val query = "SELECT sinopsis FROM Historia WHERE idHistoria = ?"
+        var sinopsis: String? = null
+
+        val cursor = db.rawQuery(query, arrayOf(idHistoria.toString()))
+        cursor.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndex("sinopsis")
+                if (columnIndex != -1) {
+                    sinopsis = it.getString(columnIndex)
+                } else {
+                    Log.e("DatabaseError", "La columna 'sinopsis' no existe.")
+                }
+            } else {
+                Log.e("DatabaseError", "No se encontró el registro con idHistoria = $idHistoria.")
+            }
+        }
+
+        db.close()
+        return sinopsis
+    }
     fun obtenerPortada(idHistoria: Int): Bitmap? {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT portada FROM Historia WHERE idHistoria = ?", arrayOf(idHistoria.toString()))
 
-        if (cursor != null && cursor.moveToFirst()) {
-            // Obtener el índice de la columna 'portada'
-            val columnaPortadaIndex = cursor.getColumnIndex("portada")
+        cursor.use {
+            if (it.moveToFirst()) {
+                val columnaPortadaIndex = it.getColumnIndex("portada")
+                Log.d("DatabaseDebug", "Índice de la columna 'portada': $columnaPortadaIndex")
 
-            // Verificar si la columna existe y contiene datos
-            if (columnaPortadaIndex != -1) {
-                val portadaBlob = cursor.getBlob(columnaPortadaIndex)
-
-                // Verificar si 'portadaBlob' no es null antes de obtener su tamaño
-                if (portadaBlob != null && portadaBlob.isNotEmpty()) {
-                    return BitmapFactory.decodeByteArray(portadaBlob, 0, portadaBlob.size)
+                if (columnaPortadaIndex != -1) {
+                    val portadaBlob = it.getBlob(columnaPortadaIndex)
+                    if (portadaBlob != null && portadaBlob.isNotEmpty()) {
+                        Log.d("DatabaseDebug", "Tamaño del BLOB: ${portadaBlob.size}")
+                        return BitmapFactory.decodeByteArray(portadaBlob, 0, portadaBlob.size)
+                    } else {
+                        Log.e("DatabaseError", "El BLOB está vacío o es NULL.")
+                    }
                 } else {
-                    Log.e("DatabaseError", "La columna 'portada' está vacía o es null.")
-                    return null
+                    Log.e("DatabaseError", "La columna 'portada' no existe en el resultado.")
                 }
             } else {
-                Log.e("DatabaseError", "La columna 'portada' no existe en la base de datos.")
-                return null
+                Log.e("DatabaseError", "No se encontró la fila para idHistoria = $idHistoria.")
             }
         }
-        cursor.close()
-        return null    }
+
+        return null
+    }
+
+
+
+    fun obtenerComentariosPorCapitulo(idHistoria: Int): List<String> {
+        val db = this.readableDatabase
+        val comentarios = mutableListOf<String>()
+        val query = "SELECT contenido FROM Comentario WHERE idHistoria = ?"
+
+        val cursor = db.rawQuery(query, arrayOf(idHistoria.toString()))
+        cursor.use {
+            while (it.moveToNext()) {
+                val columnIndex = it.getColumnIndex("contenido")
+                if (columnIndex != -1) {
+                    comentarios.add(it.getString(columnIndex))
+                } else {
+                    Log.e("DatabaseError", "La columna 'contenido' no existe.")
+                }
+            }
+        }
+
+        db.close()
+        return comentarios
+    }
+
+    @SuppressLint("Range")
+    fun obtenercapitulos(idCAP: Int): List<String> {
+        val db = this.readableDatabase
+        val comentarios = mutableListOf<String>()
+        // Realizamos una sola consulta para obtener ambos campos: numeroCapitulo y titulo
+        val query = "SELECT numeroCapitulo, titulo FROM Capitulo WHERE idCapitulo = ?"
+
+        val cursor = db.rawQuery(query, arrayOf(idCAP.toString()))
+        cursor.use {
+            // Recorremos el cursor para obtener los resultados
+            while (it.moveToNext()) {
+                // Obtener los valores de las columnas
+                val numeroCapitulo = it.getInt(it.getColumnIndex("numeroCapitulo"))
+                val titulo = it.getString(it.getColumnIndex("titulo"))
+
+                // Añadir el número de capítulo y título a la lista en el formato deseado
+                comentarios.add("Capítulo $numeroCapitulo: $titulo")
+            }
+        }
+
+        db.close()
+        return comentarios
+    }
+
+
     override fun onCreate(db: SQLiteDatabase?) {
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
+    }
+}
+class GridCap(
+    private val context: Context,
+    private val dataList: List<String> // Lista de capítulos con numero y titulo
+) : BaseAdapter() {
+
+    override fun getCount(): Int {
+        return dataList.size
+    }
+
+    override fun getItem(position: Int): Any {
+        return dataList[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view: View
+        val holder: ViewHolder
+
+        if (convertView == null) {
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            view = inflater.inflate(R.layout.grid_item_capitulos, parent, false)
+
+            holder = ViewHolder()
+            holder.textViewNumero = view.findViewById(R.id.textViewNumero)
+            holder.textViewTitulo = view.findViewById(R.id.textViewTitulo)
+            view.tag = holder
+        } else {
+            view = convertView
+            holder = view.tag as ViewHolder
+        }
+
+        // Obtener el capitulo en formato "Capítulo X: Título"
+        val capitulo = dataList[position]
+
+        // Dividir el string en número y título
+        val parts = capitulo.split(": ")
+        if (parts.size == 2) {
+            // Asignar los valores divididos a los TextViews
+            holder.textViewNumero.text = parts[0] // Número de capítulo
+            holder.textViewTitulo.text = parts[1] // Título del capítulo
+        }
+
+        return view
+    }
+
+    // ViewHolder para optimizar la búsqueda de vistas
+    private class ViewHolder {
+        lateinit var textViewNumero: TextView
+        lateinit var textViewTitulo: TextView
+    }
+}
+
+
+    private class ViewHolder {
+        lateinit var textViewNumero: TextView
+        lateinit var textViewTitulo: TextView
+    }
+
+
+
+
+
+
+class MyAdapter(private val context: Context, private val dataList: List<String>) : BaseAdapter() {
+
+    override fun getCount(): Int {
+        return dataList.size
+    }
+
+    override fun getItem(position: Int): Any {
+        return dataList[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view: View
+        val holder: ViewHolder
+
+        if (convertView == null) {
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            view = inflater.inflate(R.layout.grid_item_comentarios, parent, false)
+
+            holder = ViewHolder()
+            holder.textView = view.findViewById(R.id.textView)
+            view.tag = holder
+        } else {
+            view = convertView
+            holder = view.tag as ViewHolder
+        }
+
+        // Set the item text and color
+        holder.textView.text = dataList[position]
+        holder.textView.setTextColor(Color.WHITE) // Set text color to white
+
+        return view
+    }
+
+    private class ViewHolder {
+        lateinit var textView: TextView
+    }
+}
+
+class GridAdapter(private val context: Context, private val countries: Array<String>, private val flags: Array<Int>) :
+    BaseAdapter() {
+
+    override fun getCount(): Int = countries.size
+
+    override fun getItem(position: Int): Any = countries[position]
+
+    override fun getItemId(position: Int): Long = position.toLong()
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.grid_item_comentarios, parent, false)
+
+
+        val textView = view.findViewById<TextView>(R.id.textView)
+
+        textView.text = countries[position]
+
+        return view
     }
 }

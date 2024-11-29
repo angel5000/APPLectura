@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+  >
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+
+        >
+
+        <!-- Cubierta del libro -->
+        <ImageView
+            android:id="@+id/texture"
+            android:layout_width="199dp"
+            android:layout_height="300dp"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/cubierta"
+
+            />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="141dp"
+            android:layout_height="213dp"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+          />
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="141dp"
+            android:layout_height="213dp"
+            android:layout_gravity="center"
+
+            android:padding="5dp"
+            android:scaleType="centerCrop"
+
+
+            />
+    </FrameLayout>
+
+    <!-- Texto debajo del FrameLayout -->
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/texture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Título del Libro"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        tools:ignore="NotSibling" />
+</RelativeLayout>

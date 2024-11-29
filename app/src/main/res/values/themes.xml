@@ -13,4 +13,6 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="Theme.APPLectura.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.APPLectura.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

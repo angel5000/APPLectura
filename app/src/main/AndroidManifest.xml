@@ -15,18 +15,27 @@
 
         <activity
             android:name=".Lectura.LecturaActivity"
-            android:exported="true"
-            android:theme="@style/Theme.AppLectura.NoActionBar"
+            android:exported="false"
+
             />
         <activity
             android:name=".Lectura.PerfilActivity"
             android:exported="false" />
         <activity
             android:name=".Lectura.PrincipalActivity"
-            android:exported="false"/>
+            android:exported="true"
+            android:theme="@style/Theme.AppLectura.NoActionBar">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+
+            </activity>
         <activity
             android:name=".Lectura.LoginActivity"
             android:exported="false" />
+
     </application>
 
 </manifest>
