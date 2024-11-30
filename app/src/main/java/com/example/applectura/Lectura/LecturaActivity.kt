@@ -2,6 +2,7 @@ package com.example.applectura.Lectura
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
@@ -15,8 +16,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -32,6 +35,7 @@ import jp.wasabeef.blurry.Blurry
 
 class LecturaActivity : AppCompatActivity() {
     var iddatos=0
+    private lateinit var btleer: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lectura2)
@@ -41,10 +45,25 @@ class LecturaActivity : AppCompatActivity() {
         textView.movementMethod = ScrollingMovementMethod()
         val itemId = intent.getIntExtra("ITEM_ID", -1) // Recuperar el ID que fue enviado
 
+
+
+        ///////////
+
+
+
         // Usar el ID para realizar alguna acción (por ejemplo, cargar más detalles de la historia)
         if (itemId != -1) {
             iddatos = itemId
         }
+
+        btleer = findViewById(R.id.btleer)
+        btleer.setOnClickListener {
+            val intent = Intent(this, RedaccionActivity::class.java)
+            intent.putExtra("ITEM_IDRED", iddatos)
+
+            startActivity(intent)
+        }
+
         // Habilitar el botón de retroceso si es necesario
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)

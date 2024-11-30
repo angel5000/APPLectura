@@ -201,7 +201,7 @@
 
 
                             <Button
-                                android:id="@+id/button"
+                                android:id="@+id/btleer"
                                 android:layout_width="100dp"
                                 android:layout_height="50dp"
                                 android:text="Leer"
