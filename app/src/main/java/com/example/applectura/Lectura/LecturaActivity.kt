@@ -35,6 +35,7 @@ import jp.wasabeef.blurry.Blurry
 
 class LecturaActivity : AppCompatActivity() {
     var iddatos=0
+    var datos=""
     private lateinit var btleer: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +61,7 @@ class LecturaActivity : AppCompatActivity() {
         btleer.setOnClickListener {
             val intent = Intent(this, RedaccionActivity::class.java)
             intent.putExtra("ITEM_IDRED", iddatos)
-
+            intent.putExtra("titulo", datos)
             startActivity(intent)
         }
 
@@ -105,8 +106,13 @@ class LecturaActivity : AppCompatActivity() {
         gridView.adapter = adapter
         val gridView2: GridView = findViewById(R.id.gridviewcap)
         val capitulos =
-            dbHelper.obtenercapitulos(iddatos)  // Este método debería devolver la lista de capítulos
+            dbHelper.obtenercapitulos(iddatos)
+        val tituloRed =
+            dbHelper.obtenercapitulosTitulo(iddatos)// Este método debería devolver la lista de capítulos
         val adapter2 = GridCap(this, capitulos)
+        val adapterTitulo = GridCap(this, tituloRed)
+         datos = adapterTitulo.getItem(0).toString()
+
         gridView2.adapter = adapter2
         val imageView2: ImageView = findViewById(R.id.texture2)
 
@@ -274,7 +280,29 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return comentarios
     }
+    @SuppressLint("Range")
+    fun obtenercapitulosTitulo(idCAP: Int): List<String> {
+        val db = this.readableDatabase
+        val comentarios = mutableListOf<String>()
+        // Realizamos una sola consulta para obtener ambos campos: numeroCapitulo y titulo
+        val query = "SELECT numeroCapitulo, titulo FROM Capitulo WHERE idHistoria = ? LIMIT 1"
 
+        val cursor = db.rawQuery(query, arrayOf(idCAP.toString()))
+        cursor.use {
+            // Recorremos el cursor para obtener los resultados
+            while (it.moveToNext()) {
+                // Obtener los valores de las columnas
+                val numeroCapitulo = it.getInt(it.getColumnIndex("numeroCapitulo"))
+                val titulo = it.getString(it.getColumnIndex("titulo"))
+
+                // Añadir el número de capítulo y título a la lista en el formato deseado
+                comentarios.add("Capítulo $numeroCapitulo\n$titulo")
+            }
+        }
+
+        db.close()
+        return comentarios
+    }
 
     override fun onCreate(db: SQLiteDatabase?) {
 
@@ -305,6 +333,7 @@ class GridCap(
         val view: View
         val holder: ViewHolder
 
+
         if (convertView == null) {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = inflater.inflate(R.layout.grid_item_capitulos, parent, false)
@@ -327,6 +356,13 @@ class GridCap(
             // Asignar los valores divididos a los TextViews
             holder.textViewNumero.text = parts[0] // Número de capítulo
             holder.textViewTitulo.text = parts[1] // Título del capítulo
+
+        /*    dato= parts[0]+"\n"+parts[1]
+            val intent = Intent(context, RedaccionActivity::class.java)
+            intent.putExtra("titulo", dato)
+            Log.d("ti", "dato: ${dato}")*/
+
+
         }
 
         return view

@@ -2,6 +2,7 @@ package com.example.applectura.Lectura
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.BitmapFactory
@@ -36,6 +37,12 @@ class RedaccionActivity : AppCompatActivity() {
         val gridView = findViewById<GridView>(R.id.gridredaccion)
         val adapter = CapituloAdapter(this, capitulos)
         gridView.adapter = adapter
+
+
+        val titulo = intent.getStringExtra("titulo") ?: "Título no disponible"
+        val textti = findViewById<TextView>(R.id.txttitulo)
+        textti.text = titulo
+
     }
 }
 
@@ -133,12 +140,6 @@ class DatabaseHelper3(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
 
-
-
-
-
-
-
     override fun onCreate(db: SQLiteDatabase?) {
 
     }
@@ -158,10 +159,9 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val capitulo = getItem(position)
         val view = LayoutInflater.from(context).inflate(R.layout.redaccion, parent, false)
-        val view2 = LayoutInflater.from(context).inflate(R.layout.activity_redaccion, parent, false)
         val imageView = view.findViewById<ImageView>(R.id.imageContent)
         val textView = view.findViewById<TextView>(R.id.txtcont)
-        val textti = view2.findViewById<TextView>(R.id.txttitulo)
+
         if (capitulo.portada != null) {
             val bitmap = BitmapFactory.decodeByteArray(capitulo.portada, 0, capitulo.portada.size)
             imageView.setImageBitmap(bitmap)
@@ -170,8 +170,9 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
             imageView.visibility = View.GONE
         }
 
-        textView.text = "Capítulo ${capitulo.numeroCapitulo}:\n\n ${ capitulo.titulo}\n\n${capitulo.contenido}"
-        textti.text = "Capítulo ${capitulo.numeroCapitulo}:\n${ capitulo.titulo}"
+        textView.text = "${capitulo.titulo}\n${capitulo.contenido}"
+
+
         return view
     }
 

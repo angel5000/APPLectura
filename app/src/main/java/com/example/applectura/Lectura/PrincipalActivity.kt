@@ -20,13 +20,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applectura.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
@@ -42,9 +45,45 @@ class PrincipalActivity : AppCompatActivity() {
     private lateinit var historias: List<Historia>
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: PrincipalActivity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContentView(R.layout.activity_principal)
+
+
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+
+// Set Home selected
+        bottomNavigationView.selectedItemId = R.id.navigation_principal
+
+// Perform item selected listener
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_agregar -> {
+                    val intent = Intent(applicationContext,CrearHistoriaActivity  ::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.navigation_principal -> true
+                R.id.navigation_principal -> {
+                    val intent = Intent(applicationContext, PrincipalActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                else -> false
+            }
+        }
+
+
+
+
+
+
+
         gridView = findViewById(R.id.gridView)
         dbHelper = DatabaseHelper2(this)
 
@@ -107,10 +146,53 @@ class PrincipalActivity : AppCompatActivity() {
             intent.putExtra("ITEM_ID", historiaId)
             startActivity(intent)
         }
+/*
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
+        if (savedInstanceState == null) {
+            loadFragment(PrincipalFragment()) // Solo carga el fragmento inicial si no hay estado guardado
+            bottomNavigation.selectedItemId = R.id.navigation_principal // Marca la opción seleccionada por defecto
+        }
+        // Configurar las acciones para cada opción
+       bottomNavigation.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.navigation_principal -> {
+                    loadFragment(PrincipalFragment())
+                    true
+                }
+                R.id.navigation_agregar -> {
+                    loadFragment(CrearFragment())
+                    true
+                }
+                /* R.id.navigation_buscar -> {
+                     loadFragment(BuscarFragment())
+                     true
+                 }*/
+                else -> false
+            }
+        }
+
+*/
+
+
+
 
 
     }
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.navigation_principal, fragment).commit()
+    }/*
+    private fun loadFragment(fragment: Fragment) {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        if (currentFragment?.javaClass == fragment.javaClass) {
+            return // Si el fragmento es el mismo, no lo reemplaces
+        }
 
+        // Reemplaza el fragmento en el contenedor
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment)
+            .commit()
+    }*/
     override fun onSupportNavigateUp(): Boolean {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         return drawerLayout.isDrawerOpen(GravityCompat.START) || super.onSupportNavigateUp()
@@ -120,6 +202,25 @@ class PrincipalActivity : AppCompatActivity() {
 
 
 }
+
+class PrincipalFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.activity_principal, container, false)
+    }
+}
+class CrearFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.activity_crear_historia, container, false)
+    }
+}
+
+
 data class Historia(val idHistoria: Int, val titulo: String, val portada: ByteArray?)
 class DatabaseHelper2(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 

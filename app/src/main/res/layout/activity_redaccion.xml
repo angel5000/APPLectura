@@ -23,9 +23,9 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="630dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="75dp"
         android:layout_marginEnd="1dp"
         android:gravity="start"
         android:orientation="vertical"
@@ -36,7 +36,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent">
@@ -45,9 +46,12 @@
                 android:id="@+id/txttitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center|left"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
                 android:text="Titulo"
-                android:textColor="@color/white" />
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
 
         </LinearLayout>
 
@@ -57,20 +61,17 @@
             android:orientation="vertical">
 
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fillViewport="true">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="460dp"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="380dp"
-                        android:layout_height="550dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
                         android:layout_marginBottom="30dp"
@@ -96,7 +97,7 @@
                 </LinearLayout>
 
 
-            </ScrollView>
+
 
 
         </LinearLayout>
