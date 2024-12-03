@@ -6,7 +6,6 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
     android:backgroundTint="#000000"
     android:backgroundTintMode="add"
     android:hapticFeedbackEnabled="true"
@@ -37,43 +36,40 @@
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1">
 
 
             <!-- Ejemplo del contenido -->
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginTop="10dp"
+                    android:text="Libros disponibles"
+                    android:textSize="24sp" />
 
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Libros disponibles"
-                        android:textSize="24sp" />
+                <GridView
+                    android:id="@+id/gridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:columnWidth="0dp"
+                    android:gravity="center"
+                    android:horizontalSpacing="16dp"
+                    android:numColumns="2"
+                    android:stretchMode="columnWidth"
+                    android:verticalSpacing="16dp" />
 
-                    <GridView
-                        android:id="@+id/gridView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:columnWidth="0dp"
-                        android:gravity="center"
-                        android:horizontalSpacing="16dp"
-                        android:numColumns="2"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="16dp" />
+            </LinearLayout>
 
-                </LinearLayout>
-            </ScrollView>
         </FrameLayout>
 
         <!-- Bottom Navigation View -->

@@ -14,6 +14,7 @@ import android.widget.BaseAdapter
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -60,7 +61,7 @@ class PrincipalActivity : AppCompatActivity() {
                     overridePendingTransition(0, 0)
                     true
                 }
-                R.id.navigation_principal -> true
+               // R.id.navigation_principal -> true
                 R.id.navigation_principal -> {
                     val intent = Intent(applicationContext, PrincipalActivity::class.java)
                     startActivity(intent)
@@ -133,39 +134,13 @@ class PrincipalActivity : AppCompatActivity() {
         gridView.setOnItemClickListener { parent, view, position, id ->
             val tag = view.tag as Pair<RecyclerView.ViewHolder, Int> // Obtener el Pair (ViewHolder, ID)
             val historiaId = tag.second // Aquí tienes el ID de la historia
+            Toast.makeText(this, "id: ${historiaId}", Toast.LENGTH_SHORT).show()
 
             // Enviar el ID a la otra actividad
             val intent = Intent(this, LecturaActivity::class.java)
             intent.putExtra("ITEM_ID", historiaId)
             startActivity(intent)
         }
-/*
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        if (savedInstanceState == null) {
-            loadFragment(PrincipalFragment()) // Solo carga el fragmento inicial si no hay estado guardado
-            bottomNavigation.selectedItemId = R.id.navigation_principal // Marca la opción seleccionada por defecto
-        }
-        // Configurar las acciones para cada opción
-       bottomNavigation.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.navigation_principal -> {
-                    loadFragment(PrincipalFragment())
-                    true
-                }
-                R.id.navigation_agregar -> {
-                    loadFragment(CrearFragment())
-                    true
-                }
-                /* R.id.navigation_buscar -> {
-                     loadFragment(BuscarFragment())
-                     true
-                 }*/
-                else -> false
-            }
-        }
-
-*/
-
 
 
 
@@ -174,18 +149,7 @@ class PrincipalActivity : AppCompatActivity() {
     private fun replaceFragment(fragment: Fragment){
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.navigation_principal, fragment).commit()
-    }/*
-    private fun loadFragment(fragment: Fragment) {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-        if (currentFragment?.javaClass == fragment.javaClass) {
-            return // Si el fragmento es el mismo, no lo reemplaces
-        }
-
-        // Reemplaza el fragmento en el contenedor
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
-            .commit()
-    }*/
+    }
     override fun onSupportNavigateUp(): Boolean {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         return drawerLayout.isDrawerOpen(GravityCompat.START) || super.onSupportNavigateUp()
@@ -196,22 +160,6 @@ class PrincipalActivity : AppCompatActivity() {
 
 }
 
-class PrincipalFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.activity_principal, container, false)
-    }
-}
-class CrearFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.activity_crear_historia, container, false)
-    }
-}
 
 
 data class Historia(val idHistoria: Int, val titulo: String, val portada: ByteArray?)

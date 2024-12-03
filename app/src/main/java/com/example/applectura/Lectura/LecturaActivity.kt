@@ -21,6 +21,7 @@ import android.widget.GridView
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.applectura.R
@@ -34,7 +35,7 @@ import java.io.OutputStream
 import jp.wasabeef.blurry.Blurry
 
 class LecturaActivity : AppCompatActivity() {
-    var iddatos=0
+    var iddatos=1
     var datos=""
     private lateinit var btleer: Button
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,7 +112,12 @@ class LecturaActivity : AppCompatActivity() {
             dbHelper.obtenercapitulosTitulo(iddatos)// Este método debería devolver la lista de capítulos
         val adapter2 = GridCap(this, capitulos)
         val adapterTitulo = GridCap(this, tituloRed)
-         datos = adapterTitulo.getItem(0).toString()
+
+        if (tituloRed.isNotEmpty()) {
+            datos = adapterTitulo.getItem(0).toString()
+        } else {
+            datos=""
+        }
 
         gridView2.adapter = adapter2
         val imageView2: ImageView = findViewById(R.id.texture2)
@@ -357,10 +363,7 @@ class GridCap(
             holder.textViewNumero.text = parts[0] // Número de capítulo
             holder.textViewTitulo.text = parts[1] // Título del capítulo
 
-        /*    dato= parts[0]+"\n"+parts[1]
-            val intent = Intent(context, RedaccionActivity::class.java)
-            intent.putExtra("titulo", dato)
-            Log.d("ti", "dato: ${dato}")*/
+
 
 
         }
