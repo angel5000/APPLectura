@@ -25,12 +25,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
         <ScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -78,14 +76,25 @@
                 android:hint="Género"
                 android:maxLength="50"
                 android:inputType="text" />
-
-            <!-- Botón para añadir capítulos -->
-            <Button
-                android:id="@+id/buttonAgregarCapitulo"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Añadir Capítulo" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
+                <Button
+                    android:id="@+id/buttonAgregarCapitulo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Añadir Capítulo" />
+
+                <CheckBox
+                    android:id="@+id/checkbt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agregar" />
+            </LinearLayout>
 
             <!-- Contenedor dinámico de capítulos -->
             <LinearLayout
@@ -99,6 +108,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Guardar Historia" />
+
+
         </LinearLayout>
     </ScrollView>
     </LinearLayout>

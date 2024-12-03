@@ -19,6 +19,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardcont"
             android:layout_width="365dp"
             android:layout_height="590dp"
             android:layout_gravity="center"

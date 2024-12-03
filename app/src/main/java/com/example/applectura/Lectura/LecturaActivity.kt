@@ -72,6 +72,7 @@ class LecturaActivity : AppCompatActivity() {
         val dbHelper = DatabaseHelper(this)
         val txtNombreLectura = findViewById<TextView>(R.id.txtnomblect)
         val txtDescripcionLectura = findViewById<TextView>(R.id.textdescrip)
+        val txtgenero = findViewById<TextView>(R.id.txtgenero)
 // Obtener datos de la base de datos
         val lectura = dbHelper.obtenerTituloPorId(iddatos)
         txtNombreLectura.text = lectura
@@ -131,8 +132,8 @@ class LecturaActivity : AppCompatActivity() {
                 .into(imageView2) // Reemplaza el contenido desenfocado en el ImageView
         }
 
-
-
+val generos=  dbHelper.obtenerGeneros(iddatos)
+        txtgenero.text=generos
     }
 
 
@@ -212,6 +213,28 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db.close()
         return sinopsis
     }
+    fun obtenerGeneros(idHistoria: Int): String? {
+        val db = this.readableDatabase
+        val query = "SELECT genero FROM Historia WHERE idHistoria = ?"
+        var genero: String? = null
+
+        val cursor = db.rawQuery(query, arrayOf(idHistoria.toString()))
+        cursor.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndex("genero")
+                if (columnIndex != -1) {
+                    genero = it.getString(columnIndex)
+                } else {
+                    Log.e("DatabaseError", "La columna 'genero' no existe.")
+                }
+            } else {
+                Log.e("DatabaseError", "No se encontró el registro con idHistoria = $idHistoria.")
+            }
+        }
+
+        db.close()
+        return genero
+    }
     fun obtenerPortada(idHistoria: Int): Bitmap? {
         val db = this.readableDatabase
         val cursor = db.rawQuery("SELECT portada FROM Historia WHERE idHistoria = ?", arrayOf(idHistoria.toString()))
@@ -268,7 +291,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val db = this.readableDatabase
         val comentarios = mutableListOf<String>()
         // Realizamos una sola consulta para obtener ambos campos: numeroCapitulo y titulo
-        val query = "SELECT numeroCapitulo, titulo FROM Capitulo WHERE idHistoria = ?"
+        val query = "SELECT numeroCapitulo, titulo FROM Capitulo WHERE idHistoria = ?and titulo IS NOT NULL AND titulo != '' "
 
         val cursor = db.rawQuery(query, arrayOf(idCAP.toString()))
         cursor.use {

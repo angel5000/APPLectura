@@ -161,7 +161,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="380dp"
-                        android:layout_height="100dp"
+                        android:layout_height="130dp"
                         android:layout_gravity="bottom|center|center_vertical"
                         android:layout_marginTop="25dp"
                         android:background="#673AB7"
@@ -171,22 +171,26 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="45dp"
+                            android:layout_height="70dp"
                             android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/textView9"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="TextView"
-                                android:textColor="#FFFFFF"
-                                android:textColorHint="#FFFFFF"
-                                tools:text="Generos:" />
+                                android:layout_marginLeft="5dp"
+                                android:text="Generos"
+                                android:textColor="#F1F1F1"
+                                android:textSize="20sp" />
+
+
 
                             <TextView
                                 android:id="@+id/txtgenero"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="10dp"
                                 android:text="Generos a mostrar"
                                 android:textColor="@color/white"
                                 android:textColorHint="@color/white" />
@@ -194,8 +198,8 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="45dp"
-                            android:layout_marginTop="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginTop="72dp"
                             android:gravity="center"
                             android:orientation="vertical">
 
@@ -204,6 +208,7 @@
                                 android:id="@+id/btleer"
                                 android:layout_width="100dp"
                                 android:layout_height="50dp"
+                                android:background="#673AB7"
                                 android:text="Leer"
                                 android:textColor="#FFFFFF" />
 

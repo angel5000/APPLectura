@@ -78,6 +78,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/black"
+            app:itemIconTint="@color/purple_200"
+            app:itemTextColor="#F0EEF4"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_nav_menu" />
 
@@ -91,5 +93,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
+        app:itemTextAppearanceActive="@style/MenuItemTitleStyle"
+        app:itemTextAppearanceInactive="@style/MenuItemTitleStyle"
         app:menu="@menu/drawer_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>
