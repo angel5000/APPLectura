@@ -9,4 +9,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string-array name="estado_opciones">
+        <item>Borrador</item>
+        <item>Publicado</item>
+        <item>En edición</item>
+    </string-array>
 </resources>

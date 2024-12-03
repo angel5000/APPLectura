@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.applectura.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class CrearHistoriaActivity : AppCompatActivity() {
+class ListaHistoriasCreadasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_historia)
-
+        val btfloat = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
 // Set Dashboard selected
@@ -27,7 +28,7 @@ class CrearHistoriaActivity : AppCompatActivity() {
                 }
                 R.id.navigation_agregar -> true
                 R.id.navigation_agregar -> {
-                    val intent = Intent(applicationContext, CrearHistoriaActivity::class.java)
+                    val intent = Intent(applicationContext, ListaHistoriasCreadasActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(1, 1)
                     true
@@ -36,9 +37,11 @@ class CrearHistoriaActivity : AppCompatActivity() {
             }
         }
 
+            btfloat.setOnClickListener {
+                val intent = Intent(this, CreaHistoriaActivity::class.java)
+                startActivity(intent)
 
-
-
+            }
 
 
     }

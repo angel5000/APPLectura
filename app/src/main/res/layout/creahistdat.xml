@@ -1,0 +1,63 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Campo Número de Capítulo -->
+        <EditText
+            android:id="@+id/editTextNumeroCapitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Número de Capítulo"
+            android:inputType="number" />
+
+        <!-- Campo Título del Capítulo -->
+        <EditText
+            android:id="@+id/editTextTituloCapitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Título del Capítulo"
+            android:maxLength="100"
+            android:inputType="text" />
+
+        <!-- Campo Contenido -->
+        <EditText
+            android:id="@+id/editTextContenidoCapitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contenido"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:lines="6"
+            android:scrollbars="vertical" />
+
+        <!-- Campo Portada del Capítulo -->
+        <Button
+            android:id="@+id/buttonSeleccionarPortadaCapitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar Portada del Capítulo" />
+
+        <!-- Campo Sección -->
+        <EditText
+            android:id="@+id/editTextSeccionCapitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sección"
+            android:inputType="text" />
+        <Button
+            android:id="@+id/btAgregaCap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guardar Capitulo" />
+
+
+    </LinearLayout>
+</ScrollView>
