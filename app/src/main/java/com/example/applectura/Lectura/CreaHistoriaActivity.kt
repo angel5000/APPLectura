@@ -32,7 +32,9 @@ import java.io.OutputStream
 
 class CreaHistoriaActivity : AppCompatActivity() {
     private var imagenSeleccion: Bitmap? = null
+    private var imagenSeleccion2: Bitmap? = null
     val SELECT_IMAGE_REQUEST = 1
+    val SELECT_IMAGE_REQUESTCAP = 2
     var idhist=0L
     private lateinit var buttonAgregarCapitulo : Button
     private lateinit var  checkBox: CheckBox
@@ -109,7 +111,7 @@ class CreaHistoriaActivity : AppCompatActivity() {
             btnGuardarportCap.setOnClickListener {
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                startActivityForResult(intent, SELECT_IMAGE_REQUEST)
+                startActivityForResult(intent, SELECT_IMAGE_REQUESTCAP)
             }
             btnGuardarCap.setOnClickListener {
                 // Acción al presionar el botón
@@ -120,7 +122,7 @@ class CreaHistoriaActivity : AppCompatActivity() {
                 val numeroCapitulo = edittextnumcap.text.toString().toInt()
                 val titulo = editexttitucap.text.toString()
                 val contenido = edittextcontcap.text.toString()
-                val portada: ByteArray? =  convertirImagenABlobCap( imagenSeleccion)
+                val portada: ByteArray? =  convertirImagenABlobCap( imagenSeleccion2)
                 val seccion = edittextseccioncap.text.toString().toInt()
                 val dbHelper = DatabaseHelperCrear(this)
                 val resultado = dbHelper.CrearCapitulo(numeroCapitulo, titulo, contenido, portada, idHistoria,seccion)
@@ -199,19 +201,32 @@ class CreaHistoriaActivity : AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == SELECT_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+
+        if (resultCode == RESULT_OK && data != null) {
             val uri: Uri? = data.data
             val bitmap = uri?.let {
                 contentResolver.openInputStream(it)?.use { inputStream ->
                     BitmapFactory.decodeStream(inputStream)
                 }
             }
-            if (bitmap != null) {
-                imagenSeleccion = bitmap // Almacena el Bitmap seleccionado
-               // findViewById<ImageView>(R.id).setImageBitmap(bitmap) // Muestra la imagen en el ImageView
+
+            when (requestCode) {
+                SELECT_IMAGE_REQUEST -> {
+                    if (bitmap != null) {
+                        imagenSeleccion = bitmap
+
+                    }
+                }
+                SELECT_IMAGE_REQUESTCAP-> {
+                    if (bitmap != null) {
+                        imagenSeleccion2 = bitmap
+
+                    }
+                }
             }
         }
     }
+
 
     private fun convertirImagenABlob(bitmap: Bitmap?): ByteArray? {
         return bitmap?.let {
@@ -222,9 +237,9 @@ class CreaHistoriaActivity : AppCompatActivity() {
     }
     private fun convertirImagenABlobCap(bitmap: Bitmap?): ByteArray? {
         return bitmap?.let {
-            val stream = ByteArrayOutputStream()
-            it.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            stream.toByteArray()
+            val stream2 = ByteArrayOutputStream()
+            it.compress(Bitmap.CompressFormat.PNG, 100, stream2)
+            stream2.toByteArray()
         }
     }
 }

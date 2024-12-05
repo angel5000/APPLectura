@@ -248,7 +248,7 @@
                                 android:layout_marginTop="15dp"
                                 android:layout_marginRight="25dp"
                                 android:gravity="right"
-                                android:text="Vertodo"
+                                android:text="Ver todo"
                                 android:textColor="@color/white" />
 
 
