@@ -61,9 +61,15 @@ class PrincipalActivity : AppCompatActivity() {
                     overridePendingTransition(0, 0)
                     true
                 }
-               // R.id.navigation_principal -> true
+
                 R.id.navigation_principal -> {
                     val intent = Intent(applicationContext, PrincipalActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.navigation_buscar -> {
+                    val intent = Intent(applicationContext, BuscarHistoriaActivity::class.java)
                     startActivity(intent)
                     overridePendingTransition(0, 0)
                     true

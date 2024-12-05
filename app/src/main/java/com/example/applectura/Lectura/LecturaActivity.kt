@@ -56,6 +56,7 @@ class LecturaActivity : AppCompatActivity() {
         // Usar el ID para realizar alguna acción (por ejemplo, cargar más detalles de la historia)
         if (itemId != -1) {
             iddatos = itemId
+
         }
 
         btleer = findViewById(R.id.btleer)
@@ -63,6 +64,7 @@ class LecturaActivity : AppCompatActivity() {
             val intent = Intent(this, RedaccionActivity::class.java)
             intent.putExtra("ITEM_IDRED", iddatos)
             intent.putExtra("titulo", datos)
+            Toast.makeText(this, "id: ${iddatos}", Toast.LENGTH_SHORT).show()
             startActivity(intent)
         }
 

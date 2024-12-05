@@ -55,14 +55,20 @@ class ListaHistoriasCreadasActivity : AppCompatActivity() {
                 R.id.navigation_principal -> {
                     val intent = Intent(applicationContext, PrincipalActivity::class.java)
                     startActivity(intent)
-                    overridePendingTransition(5, 1)
+                    overridePendingTransition(0, 0)
                     true
                 }
-                R.id.navigation_agregar -> true
+
                 R.id.navigation_agregar -> {
                     val intent = Intent(applicationContext, ListaHistoriasCreadasActivity::class.java)
                     startActivity(intent)
-                    overridePendingTransition(1, 1)
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.navigation_buscar -> {
+                    val intent = Intent(applicationContext, BuscarHistoriaActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(0, 0)
                     true
                 }
                 else -> false

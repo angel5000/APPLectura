@@ -60,6 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
                         app:cardCornerRadius="10dp">
 
                         <LinearLayout
@@ -119,7 +120,7 @@
                         android:layout_height="200dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="25dp"
-                        android:backgroundTint="#03A9F4"
+                        android:backgroundTint="#8871B1"
                         app:cardCornerRadius="20dp">
 
                         <TextView
@@ -184,7 +185,6 @@
                                 android:textSize="20sp" />
 
 
-
                             <TextView
                                 android:id="@+id/txtgenero"
                                 android:layout_width="match_parent"
@@ -204,13 +204,19 @@
                             android:orientation="vertical">
 
 
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btleer"
-                                android:layout_width="100dp"
-                                android:layout_height="50dp"
-                                android:background="#673AB7"
+                                android:layout_width="320dp"
+                                android:layout_height="wrap_content"
+                                android:background="#687BDA"
+                                android:backgroundTintMode="screen"
                                 android:text="Leer"
-                                android:textColor="#FFFFFF" />
+                                app:backgroundTint="#687BDA"
+                                android:textAllCaps="false"
+                                android:textColor="#FFFFFF"
+                                android:theme="@style/Theme.MaterialComponents.Light"
+                                app:icon="@drawable/baseline_menu_book_24"
+                                app:iconGravity="textEnd" />
 
                         </LinearLayout>
 

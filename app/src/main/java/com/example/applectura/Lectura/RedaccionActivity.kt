@@ -44,6 +44,7 @@ class RedaccionActivity : AppCompatActivity() {
         if (itemId != -1) {
             iddatos = itemId
         }
+        Toast.makeText(this, "id: ${iddatos}", Toast.LENGTH_SHORT).show()
         val dbHelper = DatabaseHelper3(this)
         val capitulos = dbHelper.obtenerCapitulos(iddatos)
 
@@ -138,11 +139,12 @@ class DatabaseHelper3(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 val portada = cursor.getBlob(cursor.getColumnIndexOrThrow("portada")) // Puede ser nulo
                 Log.d("DatabaseDebug", "Tamaño del BLOB: ${portada.size}")
                 Log.d("DatabaseDebug", "content: ${contenido}")
+                Log.d("DatabaseDebug", "id: ${idCapitulo}")
                 info.add(Capitulo(idCapitulo,numeroCapitulo, titulo, contenido, portada))
             } while (cursor.moveToNext())
 
         }
-        Log.e("DatabaseError", "error")
+       // Log.e("DatabaseError", "error")
         cursor.close()
         db.close()
         return info
@@ -293,15 +295,15 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
         val contentValues = ContentValues().apply {
             put("titulo", capitulo.titulo)
             put("contenido", capitulo.contenido)
-
+            put("portada", capitulo.portada)
             // Solo agregar la portada si no es null
-            val portada: ByteArray? = convertirImagenABlob( imagenSeleccion)
+           /* val portada: ByteArray? = convertirImagenABlob( imagenSeleccion)
             capitulo.portada=portada
             if (capitulo.portada != null) {
 
 
-                put("portada", capitulo.portada)
-            }
+
+            }*/
         }
 
         val rowsUpdated = db.update(
