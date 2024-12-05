@@ -22,6 +22,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applectura.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -34,25 +35,24 @@ import java.io.OutputStream
 
 class PrincipalActivity : AppCompatActivity() {
 
-    private lateinit var gridView: GridView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var dbHelper: DatabaseHelper2
     private lateinit var historias: List<Historia>
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: PrincipalActivity
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         setContentView(R.layout.activity_principal)
-
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
 
-// Set Home selected
         bottomNavigationView.selectedItemId = R.id.navigation_principal
+        recyclerView = findViewById(R.id.gridView)
+        dbHelper = DatabaseHelper2(this)
 
-// Perform item selected listener
+        historias = dbHelper.obtenerHistoriasConPortada()
+
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_agregar -> {
@@ -80,31 +80,16 @@ class PrincipalActivity : AppCompatActivity() {
 
 
 
-
-
-
-
-        gridView = findViewById(R.id.gridView)
-        dbHelper = DatabaseHelper2(this)
-
-        // Obtener las historias con portadas
-        historias = dbHelper.obtenerHistoriasConPortada()
-
-        // Crear y establecer el adaptador
-        val adapter = HistoriaAdapter(this, historias)
-        gridView.adapter = adapter
-
-        // Inicializa la Toolbar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        // Inicializa el DrawerLayout
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
 
-        // Configura el botón de la hamburguesa
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
+
+
+
 
         // Activa el botón de la hamburguesa
         drawerLayout.addDrawerListener(toggle)
@@ -127,35 +112,35 @@ class PrincipalActivity : AppCompatActivity() {
                     startActivity(Intent(this, PerfilActivity::class.java))
                 }
                 R.id.nav_slideshow -> {
-                    // Ir a la actividad "Slideshow"
-                   // startActivity(Intent(this, SlideshowActivity::class.java))
+
                 }
             }
 
-            // Cerrar el menú lateral después de la selección
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
 
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            val tag = view.tag as Pair<RecyclerView.ViewHolder, Int> // Obtener el Pair (ViewHolder, ID)
-            val historiaId = tag.second // Aquí tienes el ID de la historia
-            Toast.makeText(this, "id: ${historiaId}", Toast.LENGTH_SHORT).show()
 
-            // Enviar el ID a la otra actividad
+
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+
+// Crear el adaptador con la lista y el callback para clics
+        val adapter = HistoriaAdapter(historias) { historiaId ->
+            // Manejar el clic en un elemento
+            Toast.makeText(this, "ID de historia: $historiaId", Toast.LENGTH_SHORT).show()
+            // Enviar el ID a otra actividad
             val intent = Intent(this, LecturaActivity::class.java)
             intent.putExtra("ITEM_ID", historiaId)
             startActivity(intent)
         }
+// Asignar el adaptador al RecyclerView
+        recyclerView.adapter = adapter
 
 
 
 
     }
-    private fun replaceFragment(fragment: Fragment){
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.navigation_principal, fragment).commit()
-    }
+
     override fun onSupportNavigateUp(): Boolean {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         return drawerLayout.isDrawerOpen(GravityCompat.START) || super.onSupportNavigateUp()
@@ -230,50 +215,40 @@ class DatabaseHelper2(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
 }
-class HistoriaAdapter(private val context: Context, private val historias: List<Historia>) : BaseAdapter() {
+class HistoriaAdapter(
+    private val historias: List<Historia>,
+    private val itemClickListener: (Int) -> Unit // Callback para manejar clics
+) : RecyclerView.Adapter<HistoriaAdapter.HistoriaViewHolder>() {
 
-    override fun getCount(): Int {
-        return historias.size
+    class HistoriaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val icon: ImageView = itemView.findViewById(R.id.icon)
+        val text: TextView = itemView.findViewById(R.id.text)
     }
 
-    override fun getItem(position: Int): Any {
-        return historias[position]
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoriaViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.grid_item_lecturas, parent, false)
+        return HistoriaViewHolder(view)
     }
 
-    override fun getItemId(position: Int): Long {
-        return historias[position].idHistoria.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val holder: ViewHolder
-        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.grid_item_lecturas, parent, false)
-
-        if (convertView == null) {
-            holder = ViewHolder()
-            holder.icon = view.findViewById(R.id.icon)
-            holder.text = view.findViewById(R.id.text)
-            view.tag = Pair(holder, historias[position].idHistoria)
-        } else {
-            val tag = view.tag as Pair<ViewHolder, Int>
-            holder = tag.first
-        }
-
+    override fun onBindViewHolder(holder: HistoriaViewHolder, position: Int) {
         val historia = historias[position]
 
-        // Establecer la portada como imagen
+        // Configurar imagen
         historia.portada?.let {
             val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
             holder.icon.setImageBitmap(bitmap)
         }
 
+        // Configurar texto
         holder.text.text = historia.titulo
 
-        return view
+        // Configurar clic
+        holder.itemView.setOnClickListener {
+            itemClickListener(historia.idHistoria) // Pasar idHistoria al callback
+        }
     }
 
-    private class ViewHolder {
-        lateinit var icon: ImageView
-        lateinit var text: TextView
+    override fun getItemCount(): Int {
+        return historias.size
     }
 }
-

@@ -7,9 +7,6 @@
     android:gravity="center"
     android:padding="8dp">
 
-
-
-    <!-- Nombre del país -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

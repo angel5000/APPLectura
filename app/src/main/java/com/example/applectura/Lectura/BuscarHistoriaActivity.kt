@@ -15,7 +15,10 @@ import android.widget.EditText
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applectura.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
@@ -25,7 +28,7 @@ import java.io.OutputStream
 
 class BuscarHistoriaActivity : AppCompatActivity() {
     private lateinit var dbHelper: Buscarhistdb
-    private lateinit var gridView: GridView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var editTextBuscar: EditText
     private lateinit var btBuscarHistoria: Button
 
@@ -35,19 +38,35 @@ class BuscarHistoriaActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
         bottomNavigationView.selectedItemId = R.id.navigation_buscar
         editTextBuscar = findViewById(R.id.editTextBuscar)
-        gridView = findViewById(R.id.gridhistbuscar)
+        recyclerView = findViewById(R.id.gridhistbuscar)
         btBuscarHistoria = findViewById(R.id.btbuscarhistoria)
         dbHelper = Buscarhistdb(this)
 
-        val idUsuario = 1 // Reemplaza con el ID del usuario actual
+
         btBuscarHistoria.setOnClickListener {
             val nombre = editTextBuscar.text.toString()
-            val HistoriaCreada = dbHelper.Buscarpornombre( nombre)
-            val adapter = BuscaHistoriaadapter(this, HistoriaCreada)
-            gridView.adapter = adapter
+
+            // Obtener las historias desde la base de datos
+            val HistoriaCreada = dbHelper.Buscarpornombre(nombre)
+
+            // Configurar el RecyclerView
+            val recyclerView = findViewById<RecyclerView>(R.id.gridhistbuscar)
+
+
+            recyclerView.layoutManager = GridLayoutManager(this, 1)
+            val adapter = BuscaHistoriaadapter(this,
+            HistoriaCreada
+            ) { historiaId ->
+                // Acciones cuando se hace clic en un elemento
+                Toast.makeText(this, "id: $historiaId", Toast.LENGTH_SHORT).show()
+
+                // Enviar el ID a la otra actividad
+                val intent = Intent(this, LecturaActivity::class.java)
+                intent.putExtra("ITEM_ID", historiaId)
+                startActivity(intent)
+            }
+            recyclerView.adapter = adapter
         }
-
-
 
 
 // Perform item selected listener
@@ -84,7 +103,7 @@ class Buscarhistdb(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
     companion object {
         private const val DATABASE_NAME =
-            "LecturaAPPBD.db" // Nombre del archivo de base de datos
+            "LecturaAPPBD.db"
         private const val DATABASE_VERSION = 2
     }
 
@@ -143,11 +162,7 @@ class Buscarhistdb(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return historiascr
     }
 
-    fun eliminarHistoria(idHistoria: Int): Boolean {
-        val db = this.writableDatabase
-        val result = db.delete("Historia", "idHistoria = ?", arrayOf(idHistoria.toString()))
-        return result > 0
-    }
+
 
 
 
@@ -160,48 +175,25 @@ class Buscarhistdb(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     }
 }
 
-class  BuscaHistoriaadapter(private val context: Context, private val historias: MutableList<HistoriaBuscar>) :
-    BaseAdapter() {
+class BuscaHistoriaadapter(
+    private val context: Context,
+    private val historias: MutableList<HistoriaBuscar>,
+    private val itemClickListener: (Int) -> Unit
+) : RecyclerView.Adapter<BuscaHistoriaadapter.ViewHolder>() {
 
-    private val db = Mostrarhistdb(context)
-
-    override fun getCount(): Int {
-        return historias.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.grid_busca_historia, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun getItem(position: Int): Any {
-        return historias[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return historias[position].idHistoria.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val holder: ViewHolder
-        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.grid_busca_historia, parent, false)
-
-        if (convertView == null) {
-            holder = ViewHolder()
-            holder.icon = view.findViewById(R.id.icon)
-            holder.text = view.findViewById(R.id.txtnombhist)
-            holder.fecha = view.findViewById(R.id.txfecha)
-            holder.autor = view.findViewById(R.id.txtautor)
-
-
-            view.tag = holder
-        } else {
-            holder = view.tag as ViewHolder
-        }
-
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val historia = historias[position]
 
-        // Establecer la portada
+        // Establecer los datos del elemento
         if (historia.portada != null) {
             val bitmap = BitmapFactory.decodeByteArray(historia.portada, 0, historia.portada.size)
             holder.icon.setImageBitmap(bitmap)
         } else {
-            // Imagen predeterminada si no hay portada
             holder.icon.setImageBitmap(null)
         }
 
@@ -209,18 +201,19 @@ class  BuscaHistoriaadapter(private val context: Context, private val historias:
         holder.fecha.text = historia.fecha
         holder.autor.text = historia.usuarionomb
 
-        // Acción del botón Eliminar
-
-
-        return view
+        // Asignar un clic al item
+        holder.itemView.setOnClickListener {
+            itemClickListener(historia.idHistoria)
+        }
     }
 
-    // ViewHolder para optimizar las vistas
-    private class ViewHolder {
-        lateinit var icon: ImageView
-        lateinit var text: TextView
-        lateinit var fecha: TextView
-        lateinit var autor: TextView
+    override fun getItemCount(): Int = historias.size
 
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val icon: ImageView = view.findViewById(R.id.icon)
+        val text: TextView = view.findViewById(R.id.txtnombhist)
+        val fecha: TextView = view.findViewById(R.id.txfecha)
+        val autor: TextView = view.findViewById(R.id.txtautor)
     }
+
 }

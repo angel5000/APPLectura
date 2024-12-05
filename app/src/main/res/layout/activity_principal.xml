@@ -12,13 +12,12 @@
     tools:context=".Lectura.PrincipalActivity"
     tools:visibility="visible">
 
-    <!-- Contenedor principal -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Toolbar -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,15 +31,13 @@
                 app:popupTheme="@style/Theme.APPLectura.PopupOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- Contenedor del contenido principal -->
+
         <FrameLayout
             android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-
-            <!-- Ejemplo del contenido -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,7 +53,7 @@
                     android:text="Libros disponibles"
                     android:textSize="24sp" />
 
-                <GridView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/gridView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -72,7 +69,7 @@
 
         </FrameLayout>
 
-        <!-- Bottom Navigation View -->
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
@@ -85,7 +82,7 @@
 
     </LinearLayout>
 
-    <!-- Navigation Drawer -->
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

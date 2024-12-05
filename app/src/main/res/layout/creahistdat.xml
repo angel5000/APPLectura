@@ -10,7 +10,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Campo Número de Capítulo -->
         <EditText
             android:id="@+id/editTextNumeroCapitulo"
             android:layout_width="match_parent"
@@ -18,7 +17,6 @@
             android:hint="Número de Capítulo"
             android:inputType="number" />
 
-        <!-- Campo Título del Capítulo -->
         <EditText
             android:id="@+id/editTextTituloCapitulo"
             android:layout_width="match_parent"
@@ -27,7 +25,6 @@
             android:maxLength="100"
             android:inputType="text" />
 
-        <!-- Campo Contenido -->
         <EditText
             android:id="@+id/editTextContenidoCapitulo"
             android:layout_width="match_parent"
@@ -38,14 +35,12 @@
             android:lines="6"
             android:scrollbars="vertical" />
 
-        <!-- Campo Portada del Capítulo -->
         <Button
             android:id="@+id/buttonSeleccionarPortadaCapitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Seleccionar Portada del Capítulo" />
 
-        <!-- Campo Sección -->
         <EditText
             android:id="@+id/editTextSeccionCapitulo"
             android:layout_width="match_parent"

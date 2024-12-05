@@ -34,7 +34,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Campo Título -->
+
             <EditText
                 android:id="@+id/editTextTitulo"
                 android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                 android:maxLength="100"
                 android:inputType="text" />
 
-            <!-- Campo Sinopsis -->
+
             <EditText
                 android:id="@+id/editTextSinopsis"
                 android:layout_width="match_parent"
@@ -54,21 +54,21 @@
                 android:lines="4"
                 android:scrollbars="vertical" />
 
-            <!-- Campo Estado -->
+
             <Spinner
                 android:id="@+id/spinnerEstado"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/estado_opciones" />
 
-            <!-- Campo Portada -->
+
             <Button
                 android:id="@+id/buttonSeleccionarPortada"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Seleccionar Portada" />
 
-            <!-- Campo Género -->
+
             <EditText
                 android:id="@+id/editTextGenero"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                     android:text="Agregar" />
             </LinearLayout>
 
-            <!-- Contenedor dinámico de capítulos -->
+
             <LinearLayout
                 android:id="@+id/contenedorCapitulos"
                 android:layout_width="match_parent"
