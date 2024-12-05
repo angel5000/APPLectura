@@ -155,7 +155,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     companion object {
         private const val DATABASE_NAME =
             "LecturaAPPBD.db" // Nombre del archivo de base de datos
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
     }
 
     private val databasePath = context.getDatabasePath(DATABASE_NAME).path
@@ -165,6 +165,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             copiarBaseDatos(context)
         }
     }
+
     private fun copiarBaseDatos(context: Context) {
         val inputStream: InputStream = context.assets.open(DATABASE_NAME)
         val outputFile: String = databasePath

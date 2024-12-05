@@ -53,9 +53,9 @@ class RedaccionActivity : AppCompatActivity() {
         gridView.adapter = adapter
 
 
-        val titulo = intent.getStringExtra("titulo") ?: "Título no disponible"
-        val textti = findViewById<TextView>(R.id.txttitulo)
-        textti.text = titulo
+       // val titulo = intent.getStringExtra("titulo") ?: "Título no disponible"
+      //  val textti = findViewById<TextView>(R.id.txttitulo)
+      //  textti.text = titulo
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -86,7 +86,7 @@ class DatabaseHelper3(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     companion object {
         private const val DATABASE_NAME =
             "LecturaAPPBD.db" // Nombre del archivo de base de datos
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
     }
 
     private val databasePath = context.getDatabasePath(DATABASE_NAME).path
@@ -127,7 +127,7 @@ class DatabaseHelper3(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
         // Realizamos una sola consulta para obtener ambos campos: numeroCapitulo y titulo
         val cursor = db.rawQuery(
-            "SELECT idCapitulo,numeroCapitulo, titulo, contenido, portada FROM Capitulo WHERE idHistoria =?",
+            "SELECT idCapitulo,numeroCapitulo, titulo, contenido, portada, seccion FROM Capitulo WHERE idHistoria =?",
             arrayOf(idHistoria.toString()) // Pasar el parámetro como un array de Strings
         )
         if (cursor.moveToFirst()) {
@@ -136,11 +136,20 @@ class DatabaseHelper3(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                 val numeroCapitulo = cursor.getInt(cursor.getColumnIndexOrThrow("numeroCapitulo"))
                 val titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
                 val contenido = cursor.getString(cursor.getColumnIndexOrThrow("contenido"))
-                val portada = cursor.getBlob(cursor.getColumnIndexOrThrow("portada")) // Puede ser nulo
-                Log.d("DatabaseDebug", "Tamaño del BLOB: ${portada.size}")
+                val portada: ByteArray? = cursor.getBlob(cursor.getColumnIndexOrThrow("portada"))
+
+                if (portada != null) {
+                    Log.d("DatabaseDebug", "Tamaño del BLOB: ${portada.size}")
+                } else {
+                    Log.d("DatabaseDebug", "El BLOB 'portada' es null")
+                }
+
                 Log.d("DatabaseDebug", "content: ${contenido}")
                 Log.d("DatabaseDebug", "id: ${idCapitulo}")
-                info.add(Capitulo(idCapitulo,numeroCapitulo, titulo, contenido, portada))
+
+                // Agregar al listado, pasando null si portada es null
+                info.add(Capitulo(idCapitulo, numeroCapitulo, titulo, contenido, portada))
+
             } while (cursor.moveToNext())
 
         }
@@ -201,6 +210,7 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
         val imageView = view.findViewById<ImageView>(R.id.imageContent)
         val cardView = view.findViewById<CardView>(R.id.cardcont)
         val textView = view.findViewById<TextView>(R.id.txtcont)
+        val texttitulo = view.findViewById<TextView>(R.id.txttitulo)
 
         // Configura la portada del capítulo si está disponible
         if (capitulo.portada != null) {
@@ -211,8 +221,19 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
             imageView.visibility = View.GONE
         }
 
-        textView.text = "${capitulo.titulo}\n${capitulo.contenido}"
+        textView.text = "${capitulo.contenido}"
+       // texttitulo.text = if (capitulo.titulo.isNotEmpty()) "Capitulo: ${capitulo.numeroCapitulo}\n"+capitulo.titulo else ""
+        texttitulo.text = if (capitulo.numeroCapitulo == 0) {
+            capitulo.titulo // Solo muestra el título si el número del capítulo es 0
+        } else {
+            if (capitulo.titulo.isNotEmpty()) {
+                "Capítulo: ${capitulo.numeroCapitulo}\n${capitulo.titulo}"
+            } else {
+                "" // Si el título está vacío, no muestra nada
+            }
+        }
 
+//texttitulo.text="Capitulo: ${capitulo.numeroCapitulo}\n${capitulo.titulo}"
         // Configura el evento de larga pulsación
         cardView.setOnLongClickListener {
             showPopupMenu(cardView, capitulo, textView, imageView)

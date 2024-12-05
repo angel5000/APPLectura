@@ -174,7 +174,7 @@ class DatabaseHelper2(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     companion object {
         private const val DATABASE_NAME =
             "LecturaAPPBD.db" // Nombre del archivo de base de datos
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
     }
 
     private val databasePath = context.getDatabasePath(DATABASE_NAME).path

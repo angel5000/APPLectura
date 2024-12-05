@@ -1,12 +1,10 @@
 package com.example.applectura.Lectura
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +15,7 @@ import android.widget.EditText
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.applectura.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.File
@@ -87,7 +85,7 @@ class Buscarhistdb(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
     companion object {
         private const val DATABASE_NAME =
             "LecturaAPPBD.db" // Nombre del archivo de base de datos
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_VERSION = 2
     }
 
     private val databasePath = context.getDatabasePath(DATABASE_NAME).path
@@ -97,6 +95,8 @@ class Buscarhistdb(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
             copiarBaseDatos(context)
         }
     }
+
+
     private fun copiarBaseDatos(context: Context) {
         val inputStream: InputStream = context.assets.open(DATABASE_NAME)
         val outputFile: String = databasePath

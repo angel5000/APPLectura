@@ -10,20 +10,42 @@
     tools:context=".Lectura.LecturaActivity">
 
 
+
     <LinearLayout
-        android:layout_width="400dp"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/txttitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:text="Titulo"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardcont"
-            android:layout_width="365dp"
-            android:layout_height="590dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="10dp"
             android:background="#673AB7"
             android:backgroundTint="#52673AB7"
@@ -32,7 +54,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="start"
                 android:orientation="vertical">
 
@@ -45,15 +67,15 @@
                     android:layout_marginBottom="5dp"
                     android:gravity="center|left"
                     android:maxWidth="400dp"
-                    android:maxHeight="380dp"
+
                     android:text="Comentarioss"
                     android:textColor="@color/white" />
 
                 <ImageView
                     android:id="@+id/imageContent"
-                    android:layout_width="355dp"
+                    android:layout_width="350dp"
                     android:layout_height="450dp"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="15dp"
                     android:scaleType="centerCrop"
                     android:visibility="gone" />
 
