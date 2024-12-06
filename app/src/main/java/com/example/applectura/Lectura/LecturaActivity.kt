@@ -1,5 +1,6 @@
 package com.example.applectura.Lectura
 
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -8,36 +9,36 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
-import android.widget.Spinner
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.applectura.R
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Picasso.LoadedFrom
-import com.squareup.picasso.Target
+import jp.wasabeef.blurry.Blurry
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.io.OutputStream
-import jp.wasabeef.blurry.Blurry
+
 
 class LecturaActivity : AppCompatActivity() {
     var iddatos=1
     var datos=""
     private lateinit var btleer: Button
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lectura2)
@@ -136,7 +137,30 @@ class LecturaActivity : AppCompatActivity() {
 
 val generos=  dbHelper.obtenerGeneros(iddatos)
         txtgenero.text=generos
+      /*  val scrollView = findViewById<ScrollView>(R.id.scroll)
+        val textView2 = findViewById<TextView>(R.id.textdescrip)
+
+// Configurar un listener en el TextView
+        textView2.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    // Evitar que el ScrollView principal maneje el evento táctil
+                    scrollView.parent.requestDisallowInterceptTouchEvent(true)
+                }
+                MotionEvent.ACTION_UP -> {
+                    // Permitir que el ScrollView maneje los eventos nuevamente
+                    scrollView.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            false // Dejar que el TextView maneje el desplazamiento
+        }*/
+
+       // scrollView.parent.requestDisallowInterceptTouchEvent(true)
+
+
+
     }
+
 
 
 /////////

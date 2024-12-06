@@ -29,13 +29,13 @@
 
     <ImageView
         android:id="@+id/texture"
-        android:layout_width="140dp"
-        android:layout_height="200dp"
+        android:layout_width="160dp"
+        android:layout_height="220dp"
         android:layout_gravity="left"
         android:padding="5dp"
         android:scaleType="centerCrop"
 
-        app:srcCompat="@drawable/cubierta" />
+        app:srcCompat="@drawable/cubierta2__1_" />
 
     <View
         android:id="@+id/view"
@@ -45,16 +45,16 @@
         android:padding="15dp"
         android:scaleType="centerCrop"
         />
+
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="141dp"
-        android:layout_height="213dp"
+        android:layout_width="105dp"
+        android:layout_height="195dp"
         android:layout_gravity="center"
 
-        android:padding="5dp"
-
-        android:scaleType="centerCrop"
-        />
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/txtnombhist"

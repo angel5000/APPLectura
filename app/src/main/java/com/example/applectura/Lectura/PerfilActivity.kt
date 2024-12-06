@@ -21,9 +21,6 @@ class PerfilActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-
-
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

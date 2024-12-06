@@ -17,6 +17,8 @@ import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applectura.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,21 +29,21 @@ import java.io.OutputStream
 
 class ListaHistoriasCreadasActivity : AppCompatActivity() {
     private lateinit var dbHelper: Mostrarhistdb
-    private lateinit var gridView: GridView
+    private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_historia)
         val btfloat = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigation)
-        gridView = findViewById(R.id.gridhistcreada)
+       // gridView = findViewById(R.id.gridhistcreada)
         dbHelper = Mostrarhistdb(this)
 
         val idUsuario = 1 // Reemplaza con el ID del usuario actual
-        val HistoriaCreada = dbHelper.obtenerHistoriasPorUsuario(idUsuario)
+        val historias = dbHelper.obtenerHistoriasPorUsuario(idUsuario)
 
-        val adapter = ListHistoriaadapter(this, HistoriaCreada)
-        gridView.adapter = adapter
-
+        recyclerView = findViewById(R.id.gridhistcreada)
+        recyclerView.layoutManager = GridLayoutManager(this, 1) // 2 columnas como el GridView
+        recyclerView.adapter = ListHistoriaadapter(this, historias)
 
 
 
@@ -162,40 +164,26 @@ class Mostrarhistdb(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME,
     }
 }
 
-class ListHistoriaadapter(private val context: Context, private val historias: MutableList<HistoriaCreada>) :
-    BaseAdapter() {
+class ListHistoriaadapter( private val context: Context,
+                           private val historias: MutableList<HistoriaCreada>
+) : RecyclerView.Adapter<ListHistoriaadapter.HistoriaViewHolder>() {
 
     private val db = Mostrarhistdb(context)
 
-    override fun getCount(): Int {
-        return historias.size
+    inner class HistoriaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val icon: ImageView = itemView.findViewById(R.id.icon)
+        val text: TextView = itemView.findViewById(R.id.txtnombhist)
+        val fecha: TextView = itemView.findViewById(R.id.txfecha)
+        val autor: TextView = itemView.findViewById(R.id.txtautor)
+        val btnEliminar: Button = itemView.findViewById(R.id.bteliminarhist)
     }
 
-    override fun getItem(position: Int): Any {
-        return historias[position]
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoriaViewHolder {
+        val view = LayoutInflater.from(context).inflate(R.layout.items_creacion_historia, parent, false)
+        return HistoriaViewHolder(view)
     }
 
-    override fun getItemId(position: Int): Long {
-        return historias[position].idHistoria.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val holder: ViewHolder
-        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.items_creacion_historia, parent, false)
-
-        if (convertView == null) {
-            holder = ViewHolder()
-            holder.icon = view.findViewById(R.id.icon)
-            holder.text = view.findViewById(R.id.txtnombhist)
-            holder.fecha = view.findViewById(R.id.txfecha)
-            holder.autor = view.findViewById(R.id.txtautor)
-            holder.btnEliminar = view.findViewById(R.id.bteliminarhist)
-
-            view.tag = holder
-        } else {
-            holder = view.tag as ViewHolder
-        }
-
+    override fun onBindViewHolder(holder: HistoriaViewHolder, position: Int) {
         val historia = historias[position]
 
         // Establecer la portada
@@ -203,8 +191,7 @@ class ListHistoriaadapter(private val context: Context, private val historias: M
             val bitmap = BitmapFactory.decodeByteArray(historia.portada, 0, historia.portada.size)
             holder.icon.setImageBitmap(bitmap)
         } else {
-            // Imagen predeterminada si no hay portada
-            holder.icon.setImageBitmap(null)
+            holder.icon.setImageBitmap(null) // Imagen predeterminada si no hay portada
         }
 
         holder.text.text = historia.titulo
@@ -213,99 +200,18 @@ class ListHistoriaadapter(private val context: Context, private val historias: M
 
         // Acción del botón Eliminar
         holder.btnEliminar.setOnClickListener {
-            // Eliminar de la base de datos
             val success = db.eliminarHistoria(historia.idHistoria)
 
             if (success) {
-                // Eliminar de la lista y notificar al adaptador
                 historias.removeAt(position)
-                notifyDataSetChanged()
+                notifyItemRemoved(position)
             } else {
                 Toast.makeText(context, "No se pudo eliminar la historia", Toast.LENGTH_SHORT).show()
             }
         }
-
-        return view
     }
 
-    // ViewHolder para optimizar las vistas
-    private class ViewHolder {
-        lateinit var icon: ImageView
-        lateinit var text: TextView
-        lateinit var fecha: TextView
-        lateinit var autor: TextView
-        lateinit var btnEliminar: Button
-    }
-}
-
-
-/*
-class ListHistoriaadapter(private val context: Context, private val historias: List<HistoriaCreada>) : BaseAdapter() {
-
-
-    override fun getCount(): Int {
+    override fun getItemCount(): Int {
         return historias.size
     }
-
-    override fun getItem(position: Int): Any {
-        return historias[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-        return historias[position].idHistoria.toLong()
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val holder: ViewHolder
-        val view: View = convertView ?: LayoutInflater.from(context).inflate(R.layout.items_creacion_historia, parent, false)
-
-        if (convertView == null) {
-            holder = ViewHolder()
-            holder.icon = view.findViewById(R.id.icon)
-            holder.textnomb = view.findViewById(R.id.txtnombhist)
-
-            holder.textfecha = view.findViewById(R.id.txfecha)
-
-            holder.textautor = view.findViewById(R.id.txtautor)
-            holder.eliminar = view.findViewById(R.id.bteliminarhist)
-            view.tag = Pair(holder, historias[position].idHistoria)
-        } else {
-            val tag = view.tag as Pair<ViewHolder, Int>
-            holder = tag.first
-        }
-
-        val historia = historias[position]
-
-        // Establecer la portada como imagen
-        if (historia.portada != null) {
-            val bitmap = BitmapFactory.decodeByteArray(historia.portada, 0, historia.portada.size)
-            holder.icon.setImageBitmap(bitmap)
-        } else {
-            // Imagen predeterminada si no hay portada
-            holder.icon.setImageBitmap(null)
-        }
-
-        /*  historia.portada?.let {
-              val bitmap = BitmapFactory.decodeByteArray(it, 0, it.size)
-              holder.icon.setImageBitmap(bitmap)
-          }
-  */
-        holder.textnomb .text = historia.titulo
-        holder.textfecha.text = historia.fecha
-        holder.textautor.text = historia.usuarionomb
-        holder.eliminar.setOnClickListener {
-            eliminarHistoria(historia.idHistoria, position)
-        }
-        return view
-    }
-
-
-    private class ViewHolder {
-        lateinit var icon: ImageView
-        lateinit var textautor: TextView
-        lateinit var textnomb: TextView
-        lateinit var textfecha: TextView
-        lateinit var eliminar: Button
-    }
 }
-*/

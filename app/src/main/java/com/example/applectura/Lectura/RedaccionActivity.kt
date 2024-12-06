@@ -45,6 +45,9 @@ class RedaccionActivity : AppCompatActivity() {
             iddatos = itemId
         }
         Toast.makeText(this, "id: ${iddatos}", Toast.LENGTH_SHORT).show()
+
+
+
         val dbHelper = DatabaseHelper3(this)
         val capitulos = dbHelper.obtenerCapitulos(iddatos)
 
@@ -52,10 +55,6 @@ class RedaccionActivity : AppCompatActivity() {
         val adapter = CapituloAdapter(this, capitulos)
         gridView.adapter = adapter
 
-
-       // val titulo = intent.getStringExtra("titulo") ?: "Título no disponible"
-      //  val textti = findViewById<TextView>(R.id.txttitulo)
-      //  textti.text = titulo
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -158,30 +157,6 @@ class DatabaseHelper3(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         db.close()
         return info
     }
-    /*    val capitulos = mutableListOf<Capitulo>()
-        val db = this.readableDatabase
-
-        // Modificar el rawQuery para usar el parámetro idHistoria
-        val cursor = db.rawQuery(
-            "SELECT numeroCapitulo, titulo, contenido, portada FROM Capitulo WHERE idHistoria =?",
-            arrayOf(idHistoria.toString()) // Pasar el parámetro como un array de Strings
-        )
-
-        if (cursor.moveToFirst()) {
-            do {
-                val numeroCapitulo = cursor.getInt(cursor.getColumnIndexOrThrow("numeroCapitulo"))
-                val titulo = cursor.getString(cursor.getColumnIndexOrThrow("titulo"))
-                val contenido = cursor.getString(cursor.getColumnIndexOrThrow("contenido"))
-                val portada = cursor.getBlob(cursor.getColumnIndexOrThrow("portada")) // Puede ser nulo
-
-                capitulos.add(Capitulo(numeroCapitulo, titulo, contenido, portada))
-            } while (cursor.moveToNext())
-        }
-
-        cursor.close()
-        db.close()
-        return capitulos*/
-
 
 
 
@@ -233,8 +208,7 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
             }
         }
 
-//texttitulo.text="Capitulo: ${capitulo.numeroCapitulo}\n${capitulo.titulo}"
-        // Configura el evento de larga pulsación
+
         cardView.setOnLongClickListener {
             showPopupMenu(cardView, capitulo, textView, imageView)
             true
@@ -295,19 +269,11 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
     fun onImageSelected(bitma: Bitmap) {
 
 
-
             imagenSeleccion = bitma
 
 
+    }
 
-    }
-    private fun convertirImagenABlob(bitmap: Bitmap?): ByteArray? {
-        return bitmap?.let {
-            val stream = ByteArrayOutputStream()
-            it.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            stream.toByteArray()
-        }
-    }
 
     private fun updateCapituloInDatabase(capitulo: DatabaseHelper3.Capitulo) {
         val databaseHelper = DatabaseHelper3(context)
@@ -321,7 +287,6 @@ class CapituloAdapter(private val context: Context, private val capitulos: List<
            /* val portada: ByteArray? = convertirImagenABlob( imagenSeleccion)
             capitulo.portada=portada
             if (capitulo.portada != null) {
-
 
 
             }*/

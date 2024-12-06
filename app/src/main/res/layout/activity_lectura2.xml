@@ -45,10 +45,16 @@
             android:orientation="vertical">
 
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/scroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:fillViewport="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -62,9 +68,8 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="10dp"
                         app:cardCornerRadius="10dp"
-                        app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        >
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -137,26 +142,40 @@
                             android:textSize="24sp" />
 
                         <LinearLayout
-                            android:layout_width="340dp"
-                            android:layout_height="100dp"
+                            android:layout_width="350dp"
+                            android:layout_height="110dp"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="65dp"
-                            android:background="#9C27B0"
-                            android:backgroundTint="#00501414"
-                            android:isScrollContainer="true"
-                            android:orientation="vertical"
-                            android:scrollbars="vertical">
 
+                            android:scrollbars="vertical">
+                            <ViewSwitcher
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+                            <androidx.core.widget.NestedScrollView
+                                android:id="@+id/inner_scrollview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
                             <TextView
                                 android:id="@+id/textdescrip"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:isScrollContainer="true"
-                                android:maxHeight="150dp"
-                                android:scrollbars="vertical"
+
+
+
+
                                 android:text="Sinopsis de la historia"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
 
                                 android:textColor="@color/white" />
+                            </androidx.core.widget.NestedScrollView>
+                            </ViewSwitcher>
+
 
                         </LinearLayout>
 
@@ -214,10 +233,10 @@
                                 android:background="#687BDA"
                                 android:backgroundTintMode="screen"
                                 android:text="Leer"
-                                app:backgroundTint="#687BDA"
                                 android:textAllCaps="false"
                                 android:textColor="#FFFFFF"
                                 android:theme="@style/Theme.MaterialComponents.Light"
+                                app:backgroundTint="#687BDA"
                                 app:icon="@drawable/baseline_menu_book_24"
                                 app:iconGravity="textEnd" />
 
@@ -312,7 +331,7 @@
                 </LinearLayout>
 
 
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
 
         </LinearLayout>
